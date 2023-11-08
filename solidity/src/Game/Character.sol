@@ -23,8 +23,7 @@ contract Character is Class, Ownable {
         uint256 health;
         uint256 mana;
         uint256 strength;
-        uint256 intellect;    mapping (address => CharacterData) public characters;
-
+        uint256 intellect; 
         uint256 armor;
         uint256 spirit;
         uint256[] bag;
