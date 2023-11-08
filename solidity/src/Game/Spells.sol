@@ -28,7 +28,16 @@ contract Spells {
 
 
 
-  function createSpell(string memory _name, string memory _class, uint256 Dmg, uint256 _manaCost, uint256 _healing, uint256 _manaRegen) public {
+  function createSpell(
+    string memory _name,
+    string memory _class,
+    uint256 Dmg,
+    uint256 _manaCost,
+    uint256 _healing,
+    uint256 _manaRegen
+    ) 
+        public 
+    {
         Spell memory spellStats = Spell({
           name: _name,
           class: _class,

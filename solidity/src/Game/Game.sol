@@ -53,7 +53,7 @@ contract Game is Character {
   }
 
   function addKillCount() public {
-    Character.characters.killCount[msg.sender]++;
+    characters.killCount[msg.sender]++;
   }
 
   

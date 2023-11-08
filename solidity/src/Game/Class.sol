@@ -20,7 +20,19 @@ contract Class{
         return classes[_class];
     }
 
-    function createClass(string memory _class, string memory _mainStat, uint256 _mana, uint256 _strength, uint256 _intellect, uint256 _armor, uint256 _spirit, uint256 _defaultItemId, string memory _defaultSpell) public {
+    function createClass(
+        string memory _class,
+        string memory _mainStat,
+        uint256 _mana,
+        uint256 _strength,
+        uint256 _intellect,
+        uint256 _armor,
+        uint256 _spirit,
+        uint256 _defaultItemId,
+        string memory _defaultSpell
+    )
+         public 
+    {
         classes[_class] = ClassStat({
             class: _class,
             mainStat: _mainStat,

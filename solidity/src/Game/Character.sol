@@ -3,8 +3,13 @@ pragma solidity ^0.8.20;
 import "./Class.sol";
 import "./Items.sol";
 import "./Spells.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Character is Class {
+contract Character is Class, Ownable {
+    constructor(address initialOwner) Ownable(initialOwner) {
+        initialOwner = msg.sender;
+    }
+
     Items public itemsContract;
     Spells public spellsContract;
 
@@ -18,7 +23,8 @@ contract Character is Class {
         uint256 health;
         uint256 mana;
         uint256 strength;
-        uint256 intellect;
+        uint256 intellect;    mapping (address => CharacterData) public characters;
+
         uint256 armor;
         uint256 spirit;
         uint256[] bag;
@@ -42,7 +48,8 @@ contract Character is Class {
     mapping (address => CharacterData) public characters;
 
     function createCharacter (string memory _name, string memory _class) public {
-        
+        require(checkIfCharacterExists() != true);
+
         ClassStat memory classStats = getClassStats(_class);        
         characters[msg.sender] = CharacterData({
             name: _name,
@@ -133,7 +140,8 @@ contract Character is Class {
     }
 
     function checkKillCount() public view returns(uint256){
-        return characters.killCount[msg.sender];
+        uint256 kills = characters.killCount[msg.sender];
+        
     }
 
     
