@@ -42,9 +42,9 @@ contract Items {
         nextItemId++;
     }
     constructor() {
-      createItem("Axe",1,5,3,0,0,0,0);
-      createItem("Wooden Stick",2,0,0,8,5,0,0);
-      createItem("Necklace",3,0,0,0,5,5,0);
+      createItem("Axe",1,5,3,0,0,0,90);
+      createItem("Wooden Stick",2,0,0,8,5,0,5);
+      createItem("Necklace",3,0,0,0,5,5,5);
     }
       function rollItemDrop() public view returns (uint256) {
         uint256 choice = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 100;

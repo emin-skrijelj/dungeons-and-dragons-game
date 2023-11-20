@@ -6,8 +6,9 @@ import "./Spells.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Character is Class, Ownable {
-    constructor(address initialOwner) Ownable(initialOwner) {
-        initialOwner = msg.sender;
+    constructor() Ownable(msg.sender) {
+        require(msg.sender != address(0), "Invalid initial owner");
+        address initialOwner = msg.sender;
     }
 
     Items public itemsContract;
@@ -45,9 +46,9 @@ contract Character is Class, Ownable {
     );
     
     mapping (address => CharacterData) public characters;
-
     function createCharacter (string memory _name, string memory _class) public {
         require(checkIfCharacterExists() != true);
+        require(bytes(_name).length < 15);
 
         ClassStat memory classStats = getClassStats(_class);        
         characters[msg.sender] = CharacterData({
@@ -85,7 +86,8 @@ contract Character is Class, Ownable {
         );
     }
 
-    function characterDelete(address addy) public {
+    function characterDelete(address addy) onlyOwner public {
+
         delete characters[addy];
     }
 
@@ -94,54 +96,55 @@ contract Character is Class, Ownable {
     }
 
     function checkIfCharacterExists() public view returns (bool) {
-        require(bytes(characters[msg.sender].name).length > 0, "User does not have a Character");
+        require(bytes(characters[msg.sender].name).length > 0, "User does have a Character");
         return true;
     }
 
-    function setExp(uint256 newExp) public {
+    function setExp(uint256 newExp) onlyOwner public {
         characters[msg.sender].experience += newExp;
     }
 
-    function useMana(uint256 newMana) public {
+    function useMana(uint256 newMana) onlyOwner public {
         characters[msg.sender].mana = newMana;
     }
 
-    function setHp(uint256 newHealth) public {
+    function setHp(uint256 newHealth) onlyOwner public {
         characters[msg.sender].health = newHealth;
     }
     
-    function setIntellect(uint256 newIntellect) public {
+    function setIntellect(uint256 newIntellect) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Intellect")),"You can not add this item on your class");
         characters[msg.sender].intellect = newIntellect;
     }
 
-    function setStrength(uint256 newStrength) public {
+    function setStrength(uint256 newStrength) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Strength")),"You can not add this item on your class");
         characters[msg.sender].strength = newStrength;
     }
 
-    function setSpirit(uint256 newSpirit) public {
+    function setSpirit(uint256 newSpirit) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Spirit")),"You can not add this item on your class");
         characters[msg.sender].spirit = newSpirit;
     }
 
-    function setLevel(uint256 newLevel) public {
+    function setLevel(uint256 newLevel) onlyOwner public {
         characters[msg.sender].level = newLevel;
     }
 
-    function setArmor(uint256 newArmor) public {
+    function setArmor(uint256 newArmor) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].charClass)) == keccak256(abi.encodePacked("Warrior")),"You can not add this item on your class");
         characters[msg.sender].armor = newArmor;
     }
 
-    function addItem(uint256 newItemId) public {
+    function addItem(uint256 newItemId)onlyOwner onlyOwner public {
         characters[msg.sender].bag.push(newItemId);
     }
 
     function checkKillCount() public view returns(uint256){
-        uint256 kills = characters.killCount[msg.sender];
-        
+        uint256 kills = characters[msg.sender].killCount;
+        return kills;
     }
+
 
     
 }

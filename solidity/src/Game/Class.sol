@@ -16,6 +16,7 @@ contract Class{
     }
 
     mapping (string => ClassStat) public classes;
+    mapping (bytes32 => ClassStat) public classesByte;
     function getClassStats(string memory _class)public view returns(ClassStat memory){
         return classes[_class];
     }
@@ -33,6 +34,7 @@ contract Class{
     )
          public 
     {
+        // bytes32 inBytesClass = keccak256(bytes(_class));
         classes[_class] = ClassStat({
             class: _class,
             mainStat: _mainStat,

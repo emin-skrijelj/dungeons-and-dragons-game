@@ -52,9 +52,9 @@ contract Game is Character {
     return 0;
   }
 
-  function addKillCount() public {
-    characters.killCount[msg.sender]++;
-  }
+  // function addKillCount() public {
+  //   characters.killCount[msg.sender]++;
+  // }
 
   
 }
