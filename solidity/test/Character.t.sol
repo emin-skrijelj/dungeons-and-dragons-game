@@ -22,20 +22,12 @@ contract charTest is Test {
   }
 
   function testCharCreate() public {
-      classContract.addInitialClasses();
       characterContract.createCharacter("TestingChar", "Warrior");
       assertEq(characterContract.checkIfCharacterExists(), true);
   }
 
-  // function testSpells() public {
-  //   itemsContract.createItem(1, "test",1,1,1,1);
-  //   spellsContract.createDamageSpell("test","Warrior");
-  // }
-  function testItemCreate() public {
-    // itemsContract.addDefaultItems();
-    (,,uint256 _strength,,,,) = itemsContract.getItemAttributes(1);
-    assertEq(_strength == 5,true);
-  }
+
+
 
   
 

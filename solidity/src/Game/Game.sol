@@ -5,8 +5,8 @@ import "./Items.sol";
 import "./Spells.sol";
 
 contract Game is Character {
-  event spellUsed(string spellName, uint256 damageDealt);
-  event ItemAddedToBag(address usersAddress,string itemName, uint256 _itemId);
+
+
   // constructor(){
   // }
   modifier hasCharacter {
@@ -14,11 +14,14 @@ contract Game is Character {
     _;
   }
 
-  mapping (address => uint256) public killCount;
+  mapping (address => uint16) public killCount;
 
-  function itemPickUp(uint256 _itemId) public {
+  event spellUsed(string spellName, uint16 damageDealt);
+  event ItemAddedToBag(address usersAddress,string itemName, uint16 _itemId);
 
-    (string memory name, uint256 totalHp, uint256 strength, uint256 armor, uint256 intellect, uint256 totalMana, uint256 spirit ,) = itemsContract.itemsList(_itemId);
+  function itemPickUp(uint16 _itemId) public {
+
+    (string memory name, uint16 totalHp, uint16 strength, uint16 armor, uint16 intellect, uint16 totalMana, uint16 spirit ,) = itemsContract.itemsList(_itemId);
     characters[msg.sender].bag.push(_itemId);
     characters[msg.sender].health += totalHp;
     characters[msg.sender].strength += strength;
@@ -32,20 +35,20 @@ contract Game is Character {
   }
 
     
-  function useSpell(string memory _spellName) public returns(uint256) {
+  function useSpell(string memory _spellName) public returns(uint16) {
      if (keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Strength"))) {
-        uint256 damage = characters[msg.sender].level * 2 + characters[msg.sender].strength;
-        uint256 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
+        uint16 damage = characters[msg.sender].level * 2 + characters[msg.sender].strength;
+        uint16 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
         emit spellUsed(_spellName, addedDmg);
         return addedDmg;
     } else if (keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Spirit"))) {
-        uint256 damage = characters[msg.sender].level * 2 + characters[msg.sender].spirit;
-        uint256 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
+        uint16 damage = characters[msg.sender].level * 2 + characters[msg.sender].spirit;
+        uint16 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
         emit spellUsed(_spellName, addedDmg);
         return addedDmg;
     } else if (keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Intellect"))) {
-        uint256 damage = characters[msg.sender].level * 2 + characters[msg.sender].intellect;
-        uint256 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
+        uint16 damage = characters[msg.sender].level * 2 + characters[msg.sender].intellect;
+        uint16 addedDmg = spellsContract.getSpellDamage(_spellName,damage);
         emit spellUsed(_spellName, addedDmg);
         return addedDmg;
     }

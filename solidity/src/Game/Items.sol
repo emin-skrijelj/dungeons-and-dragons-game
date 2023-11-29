@@ -2,31 +2,38 @@ pragma solidity >=0.6.0 <0.8.21;
 
 import "./Character.sol";
 contract Items {
-    struct Item {
-      string name;
-      uint256 totalHp;
-      uint256 strength;
-      uint256 armor;
-      uint256 intellect;
-      uint256 totalMana;
-      uint256 spirit;
-      uint256 dropPercent;
+    constructor() {
+      createItem("Axe",1,5,3,0,0,0,90);
+      createItem("Wooden Stick",2,0,0,8,5,0,5);
+      createItem("Necklace",3,0,0,0,5,5,5);
     }
 
-    mapping (uint256 => Item) public itemsList;
-    uint256 public totalItems;
-    uint256 public nextItemId = 1;
+
+    struct Item {
+      string name;
+      uint16 totalHp;
+      uint16 strength;
+      uint16 armor;
+      uint16 intellect;
+      uint16 totalMana;
+      uint16 spirit;
+      uint16 dropPercent;
+    }
+
+    mapping (uint16 => Item) public itemsList;
+    uint16 public totalItems;
+    uint16 public nextItemId = 1;
     
 
     function createItem(
         string memory _name, 
-        uint256 _totalHp, 
-        uint256 _strength, 
-        uint256 _armor, 
-        uint256 _intellect, 
-        uint256 _totalMana, 
-        uint256 _spirit, 
-        uint256 _dropPercent
+        uint16 _totalHp, 
+        uint16 _strength, 
+        uint16 _armor, 
+        uint16 _intellect, 
+        uint16 _totalMana, 
+        uint16 _spirit, 
+        uint16 _dropPercent
     ) public {
         itemsList[nextItemId] = Item({
             name: _name,
@@ -38,20 +45,16 @@ contract Items {
             spirit: _spirit,
             dropPercent: _dropPercent
         });
-        totalItems++;
-        nextItemId++;
+        ++totalItems;
+        ++nextItemId;
     }
-    constructor() {
-      createItem("Axe",1,5,3,0,0,0,90);
-      createItem("Wooden Stick",2,0,0,8,5,0,5);
-      createItem("Necklace",3,0,0,0,5,5,5);
-    }
-      function rollItemDrop() public view returns (uint256) {
+    
+    function rollItemDrop() public view returns (uint16) {
         uint256 choice = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 100;
         // not using oracle here, should use it but if imake the project further will add it
         // not a real security issue since there is no point in knowing what number is chosen here
-        uint256 cumulativeChance = 0;
-        for (uint256 i = 1; i <= totalItems; i++) {
+        uint16 cumulativeChance = 0;
+        for (uint16 i = 1; i <= nextItemId-1; ++i) {
             cumulativeChance += itemsList[i].dropPercent;
             if (choice < cumulativeChance) {
                 return i;
@@ -61,15 +64,15 @@ contract Items {
         return 0; // If no item is selected
     }
 
-    function simulateItemDrop() public view returns (uint256) {
+    function simulateItemDrop() public view returns (uint16) {
         return rollItemDrop();
     }
 
-    function getItem(uint256 _itemId) public view returns (Item memory) {
+    function getItem(uint16 _itemId) public view returns (Item memory) {
         return itemsList[_itemId];
     }
 
-    function deleteItem(uint256 _itemId) public {
+    function deleteItem(uint16 _itemId) public {
       delete itemsList[_itemId];
     }
 
@@ -80,14 +83,14 @@ contract Items {
     //   createItem("Necklace",3,0,0,0,5,5,5);
     // }
 
-     function getItemAttributes(uint256 _itemId) public view returns (
+     function getItemAttributes(uint16 _itemId) public view returns (
         string memory name,
-        uint256 totalHp,
-        uint256 strength,
-        uint256 armor,
-        uint256 intellect,
-        uint256 totalMana,
-        uint256 spirit
+        uint16 totalHp,
+        uint16 strength,
+        uint16 armor,
+        uint16 intellect,
+        uint16 totalMana,
+        uint16 spirit
     ) {
         Item memory item = itemsList[_itemId];
         return (

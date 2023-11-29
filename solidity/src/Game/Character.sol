@@ -18,16 +18,16 @@ contract Character is Class, Ownable {
         string name;
         string charClass;
         string mainStat;
-        uint256 level;
-        uint256 experience;
-        uint256 killCount;
-        uint256 health;
-        uint256 mana;
-        uint256 strength;
-        uint256 intellect; 
-        uint256 armor;
-        uint256 spirit;
-        uint256[] bag;
+        uint32 experience;
+        uint8 level;
+        uint16 killCount;
+        uint16 health;
+        uint16 mana;
+        uint16 strength;
+        uint16 intellect; 
+        uint16 armor;
+        uint16 spirit;
+        uint16[] bag;
         string[] spells;
     }
 
@@ -35,14 +35,14 @@ contract Character is Class, Ownable {
         string name,
         string charClass,
         string mainStat,
-        uint256 level,
-        uint256 experience,
-        uint256 health,
-        uint256 mana,
-        uint256 strength,
-        uint256 intellect,
-        uint256 armor,
-        uint256 spirit
+        uint16 level,
+        uint32 experience,
+        uint16 health,
+        uint16 mana,
+        uint16 strength,
+        uint16 intellect,
+        uint16 armor,
+        uint16 spirit
     );
     
     mapping (address => CharacterData) public characters;
@@ -64,7 +64,7 @@ contract Character is Class, Ownable {
             intellect: classStats.intellect,
             armor: classStats.armor,
             spirit: classStats.spirit,
-            bag: new uint256[](0),
+            bag: new uint16[](0),
             spells: new string[](0)
         });
         characters[msg.sender].bag.push(classStats.defaultItemId);
@@ -87,7 +87,6 @@ contract Character is Class, Ownable {
     }
 
     function characterDelete(address addy) onlyOwner public {
-
         delete characters[addy];
     }
 
@@ -96,52 +95,52 @@ contract Character is Class, Ownable {
     }
 
     function checkIfCharacterExists() public view returns (bool) {
-        require(bytes(characters[msg.sender].name).length > 0, "User does have a Character");
-        return true;
+        return bytes(characters[msg.sender].name).length > 0;
     }
 
-    function setExp(uint256 newExp) onlyOwner public {
+
+    function setExp(uint16 newExp) onlyOwner public {
         characters[msg.sender].experience += newExp;
     }
 
-    function useMana(uint256 newMana) onlyOwner public {
+    function useMana(uint16 newMana) onlyOwner public {
         characters[msg.sender].mana = newMana;
     }
 
-    function setHp(uint256 newHealth) onlyOwner public {
+    function setHp(uint16 newHealth) onlyOwner public {
         characters[msg.sender].health = newHealth;
     }
     
-    function setIntellect(uint256 newIntellect) onlyOwner public {
+    function setIntellect(uint16 newIntellect) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Intellect")),"You can not add this item on your class");
         characters[msg.sender].intellect = newIntellect;
     }
 
-    function setStrength(uint256 newStrength) onlyOwner public {
+    function setStrength(uint16 newStrength) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Strength")),"You can not add this item on your class");
         characters[msg.sender].strength = newStrength;
     }
 
-    function setSpirit(uint256 newSpirit) onlyOwner public {
+    function setSpirit(uint16 newSpirit) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].mainStat)) == keccak256(abi.encodePacked("Spirit")),"You can not add this item on your class");
         characters[msg.sender].spirit = newSpirit;
     }
 
-    function setLevel(uint256 newLevel) onlyOwner public {
+    function setLevel(uint8 newLevel) onlyOwner public {
         characters[msg.sender].level = newLevel;
     }
 
-    function setArmor(uint256 newArmor) onlyOwner public {
+    function setArmor(uint16 newArmor) onlyOwner public {
         require(keccak256(abi.encodePacked(characters[msg.sender].charClass)) == keccak256(abi.encodePacked("Warrior")),"You can not add this item on your class");
         characters[msg.sender].armor = newArmor;
     }
 
-    function addItem(uint256 newItemId)onlyOwner onlyOwner public {
+    function addItem(uint16 newItemId)onlyOwner onlyOwner public {
         characters[msg.sender].bag.push(newItemId);
     }
 
-    function checkKillCount() public view returns(uint256){
-        uint256 kills = characters[msg.sender].killCount;
+    function checkKillCount() public view returns(uint16){
+        uint16 kills = characters[msg.sender].killCount;
         return kills;
     }
 
